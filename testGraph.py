@@ -109,11 +109,11 @@ def algorithm_Dijkstras(arr):
 
         for i_min in arr_min:
 
-            arr_num.append(i_min+1)
-
             arr_nums = []
 
             for i in range(0,len(arr[0])):
+
+                arr_num.append(i_min+1)
                 
                 if arr_all[-1-j_arr][i] == None:
                     arr_nums.append(None)
