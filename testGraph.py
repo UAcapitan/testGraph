@@ -62,6 +62,9 @@ def algorithm_Dijkstras(arr):
     # Задаю X1 - X1
     arr_nums.append(0)
 
+    # Куда идти
+    arr_num = []
+
     # Задаю первую строку
     while len(arr_nums) < len(arr[0]):
         arr_nums.append(infinity)
@@ -69,24 +72,8 @@ def algorithm_Dijkstras(arr):
     # Добавить строку в общий список
     arr_all.append(arr_nums)
 
-    # Найти минимальное число
-    min_arr = min(arr_all[0])
-
     # Обнуление строки
     arr_nums = []
-
-    # Первый элемент второго столбца
-    arr_nums.append(None)
-
-    # Цикл для второго столбца
-    for i in range(1,len(arr[0])):
-
-        if int(arr[0][i]) == 0:
-            arr_nums.append(infinity)
-        elif min_arr + int(arr[0][i]) < arr_all[0][i]:
-            arr_nums.append(min_arr+int(arr[0][i]))
-        else:
-            arr_nums.append(infinity)
 
     # Найти минимум в массиве где есть None
     def min_None(arr):
@@ -100,10 +87,11 @@ def algorithm_Dijkstras(arr):
         min_N = min(arr_None)
         return min_N
 
+    # Функция поиска всех минимумов в списке
     def find_match(myList, element):
         return [i for i, x in enumerate(myList) if x == element]
 
-    # Сколько раз нужно полторить цикл
+    # Сколько раз нужно повторить цикл
     i_repeat = len(arr[0]) - 3
 
     i_arr = 0
@@ -120,6 +108,8 @@ def algorithm_Dijkstras(arr):
         j_arr = 0
 
         for i_min in arr_min:
+
+            arr_num.append(i_min+1)
 
             arr_nums = []
 
@@ -167,6 +157,9 @@ def algorithm_Dijkstras(arr):
         print('X1 - X', i + 1, ' = ', array_min[i])
         i += 1
 
+    print(arr_num)
+
+# Функция звпусщенная
 algorithm_Dijkstras(arr)
 
 # Визуализация графа
