@@ -19,6 +19,8 @@ if x < 3:
 
 x = x + 1
 
+x = 8
+
 # Запрос у пользователя матрицы весов
 print('Введите матрицу весов. Числа вводите через один пробел.')
 print('Если ребра нету, то пишите 0.')
@@ -33,6 +35,16 @@ for i in range(1,x):
     num_in_array = input('X'+str(i)+' ')
     a = num_in_array.split(' ')
     arr.append(a)
+
+arr = [
+    [0,2,5,0,0,0,0],
+    [2,0,6,1,3,0,0],
+    [5,6,0,0,0,8,0],
+    [0,1,0,0,4,0,0],
+    [0,3,0,4,0,0,9],
+    [0,0,8,0,0,0,7],
+    [0,0,0,0,9,7,0]
+]
 
 # Создание вершин графа
 for i in range(1,x):
@@ -61,9 +73,6 @@ def algorithm_Dijkstras(arr):
 
     # Задаю X1 - X1
     arr_nums.append(0)
-
-    # Куда идти
-    arr_num = []
 
     # Задаю первую строку
     while len(arr_nums) < len(arr[0]):
@@ -112,8 +121,6 @@ def algorithm_Dijkstras(arr):
             arr_nums = []
 
             for i in range(0,len(arr[0])):
-
-                arr_num.append(i_min+1)
                 
                 if arr_all[-1-j_arr][i] == None:
                     arr_nums.append(None)
@@ -157,9 +164,52 @@ def algorithm_Dijkstras(arr):
         print('X1 - X', i + 1, ' = ', array_min[i])
         i += 1
 
+    # Найти куда идти
+    x1 = int(input('Откуда: ')) - 1
+    x2 = int(input('Куда: ')) - 1
+
+    # Переменная с которой нужно сверять
+    num = array_min[x2]
+
+    # Куда идти
+    arr_num = []
+
+    # Добавить точку финиша
+    arr_num.append(x2 + 1)
+
+    # Цикл работает до того момента пока num не сравниться с минимальным значением переменной начала
+    while num != array_min[x1]:
+        arr_reverse = arr[arr_num[-1] - 1]
+
+        len_arr = len(arr_num)
+
+        for i in arr_reverse:
+            if int(i) != infinity and int(i) != 0 and int(num) - int(i) >= 0 and int(num) - int(i) in array_min:
+                num = int(num) - int(i)
+                arr_num.append(array_min.index(num) + 1)
+
+        if len(arr_num) == len_arr:
+            break
+
+    arr_num.append(x1 + 1)
+    arr_num.reverse()
+    def build_unique_list_keep_order(seq):
+        seen = set()
+        seen_add = seen.add
+        return [x for x in seq if not (x in seen or seen_add(x))]
+    arr_num = build_unique_list_keep_order(arr_num)
     print(arr_num)
 
-# Функция звпусщенная
+
+    # Высчитать растояние
+    i = 0
+    sum = 0
+    while i < len(arr_num) - 1:
+        sum += int(arr[arr_num[i] - 1][arr_num[i + 1] - 1])
+        i += 1
+    print(sum, " - sum")
+
+# Функция запущенная
 algorithm_Dijkstras(arr)
 
 # Визуализация графа
