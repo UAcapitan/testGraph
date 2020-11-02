@@ -7,34 +7,34 @@ import math
 # Инициализация графа
 graph = nx.Graph()
 
-# Запрос у пользователя сколько графов
-print('Сколько вершин у вас?')
-x = int(input())
+# # Запрос у пользователя сколько графов
+# print('Сколько вершин у вас?')
+# x = int(input())
 
-# Если у графа меньше 3 вершин, то прекратить работу
-if x < 3:
-    print('Введите 3 или больше вершины.')
-    while x < 3:
-        x = int(input())
+# # Если у графа меньше 3 вершин, то прекратить работу
+# if x < 3:
+#     print('Введите 3 или больше вершины.')
+#     while x < 3:
+#         x = int(input())
 
-x = x + 1
+# x = x + 1
 
 x = 8
 
-# Запрос у пользователя матрицы весов
-print('Введите матрицу весов. Числа вводите через один пробел.')
-print('Если ребра нету, то пишите 0.')
-text = '   '
-arr = []
-for i in range(1,x):
-   text = text + 'X'+str(i)+' '
+# # Запрос у пользователя матрицы весов
+# print('Введите матрицу весов. Числа вводите через один пробел.')
+# print('Если ребра нету, то пишите 0.')
+# text = '   '
+# arr = []
+# for i in range(1,x):
+#    text = text + 'X'+str(i)+' '
 
-print(text)
+# print(text)
 
-for i in range(1,x):
-    num_in_array = input('X'+str(i)+' ')
-    a = num_in_array.split(' ')
-    arr.append(a)
+# for i in range(1,x):
+#     num_in_array = input('X'+str(i)+' ')
+#     a = num_in_array.split(' ')
+#     arr.append(a)
 
 arr = [
     [0,2,5,0,0,0,0],
@@ -45,6 +45,16 @@ arr = [
     [0,0,8,0,0,0,7],
     [0,0,0,0,9,7,0]
 ]
+
+# Найти куда идти
+x1 = int(input('Откуда: '))
+x2 = int(input('Куда: '))
+
+x3 = x1
+
+arr_save = arr[0]
+arr[0] = arr[x1 - 1]
+arr[x1 - 1] = arr_save
 
 # Создание вершин графа
 for i in range(1,x):
@@ -158,55 +168,54 @@ def algorithm_Dijkstras(arr):
         i += 1
         array_min.append(min_None(arr_min))
 
-    # Вывести все пути
-    i = 0
-    while i < len(array_min):
-        print('X1 - X', i + 1, ' = ', array_min[i])
-        i += 1
+    # # Вывести все пути
+    # i = 0
+    # while i < len(array_min):
+    #     print('X1 - X', i + 1, ' = ', array_min[i])
+    #     i += 1
 
-    # Найти куда идти
-    x1 = int(input('Откуда: ')) - 1
-    x2 = int(input('Куда: ')) - 1
+    x1 = 1
 
     # Переменная с которой нужно сверять
-    num = array_min[x2]
+    num = array_min[x2 - 1]
 
     # Куда идти
     arr_num = []
 
     # Добавить точку финиша
-    arr_num.append(x2 + 1)
+    arr_num.append(x2)
 
     # Цикл работает до того момента пока num не сравниться с минимальным значением переменной начала
-    while num != array_min[x1]:
+    while num != array_min[x1 - 1]:
         arr_reverse = arr[arr_num[-1] - 1]
+        arr_reverse.reverse()
 
         len_arr = len(arr_num)
 
         for i in arr_reverse:
-            if int(i) != infinity and int(i) != 0 and int(num) - int(i) >= 0 and int(num) - int(i) in array_min:
-                num = int(num) - int(i)
-                arr_num.append(array_min.index(num) + 1)
+            if array_min[arr_num[-1] - 1] - i in array_min and i != 0:
+                indexs_arr = find_match(array_min, array_min[arr_num[-1] - 1] - i)
+                indexs_arr.reverse()
+                for j in indexs_arr:
+                    if arr[j][arr_num[-1] - 1] > 0:
+                        arr_num.append(j + 1)
+                        break
 
         if len(arr_num) == len_arr:
             break
 
-    arr_num.append(x1 + 1)
+    arr_num.append(x1)
     arr_num.reverse()
     def build_unique_list_keep_order(seq):
         seen = set()
         seen_add = seen.add
         return [x for x in seq if not (x in seen or seen_add(x))]
     arr_num = build_unique_list_keep_order(arr_num)
+    arr_num[0] = x3
     print(arr_num)
 
-
     # Высчитать растояние
-    i = 0
-    sum = 0
-    while i < len(arr_num) - 1:
-        sum += int(arr[arr_num[i] - 1][arr_num[i + 1] - 1])
-        i += 1
+    sum = array_min[x2 - 1]
     print(sum, " - sum")
 
 # Функция запущенная
