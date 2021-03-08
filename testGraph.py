@@ -3,6 +3,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import copy
 import math
+from tkinter import *
+import sys
 
 # Инициализация графа
 graph = nx.Graph()
@@ -43,27 +45,33 @@ citys = ['Вінниця', 'Дніпро', 'Донецьк', 'Житомир', '
          'Тернопіль', 'Ужгород', 'Харків', 'Херсон', 'Хмельницький', 'Черкаси', 'Чернівці', 'Чернігів']
 
 # Найти куда идти
-x1 = input('Откуда: ')
-x2 = input('Куда: ')
 
-name = x1
-namex = x2
+def name_in_int():
+    global x1, x2, x3, arr
+    try:
+        x1 = entry_1.get()
+        x2 = entry_2.get()
 
-if x1 in citys:
-    x1 = citys.index(x1) + 1
-else:
-    exit
+        name = x1
+        namex = x2
 
-if x2 in citys:
-    x2 = citys.index(x2) + 1
-else:
-    exit
+        if x1 in citys:
+            x1 = citys.index(x1) + 1
+        else:
+            exit
 
-x3 = x1
+        if x2 in citys:
+            x2 = citys.index(x2) + 1
+        else:
+            exit
 
-arr_save = arr[0]
-arr[0] = arr[x1 - 1]
-arr[x1 - 1] = arr_save
+        x3 = x1
+
+        arr_save = arr[0]
+        arr[0] = arr[x1 - 1]
+        arr[x1 - 1] = arr_save
+    except:
+        sys.exit()
 
 # Создание вершин графа
 for i in range(1,x):
@@ -270,10 +278,48 @@ def algorithm_Dijkstras(arr):
         seen_add = seen.add
         return [x for x in seq if not (x in seen or seen_add(x))]
     arr_num = build_unique_list_keep_order(arr_num)
-    print(arr_num)
+    
+    text = ''
+
+    for i in arr_num:
+        text += i + ' - '
+    
+    text = text[:-3]
+    
+    label_3['text'] = 'Шлях: ' + text
 
     # Высчитать растояние
-    print('Відстань між точками:', sum)
+    label_4['text'] = 'Відстань між містами: ' + str(sum) + ' км'
 
 # Функция запущенная
-algorithm_Dijkstras(arr)
+def main():
+    global time
+    if time == 1:
+        sys.exit()
+    name_in_int()
+    algorithm_Dijkstras(arr)
+    time += 1
+
+# GUI
+root = Tk()
+root.title('Navigation')
+root.geometry('500x150')
+label_1 = Label(root, text='Откуда:')
+entry_1 = Entry(root)
+label_2 = Label(root, text='Куда:')
+entry_2 = Entry(root)
+label_3 = Label(root, text='Шлях:')
+label_4 = Label(root,text='Відстань між точками:')
+button_1 = Button(root, text='Знайти найкоротший шлях', command=main)
+
+label_1.grid(row=0, column=0)
+entry_1.grid(row=0, column=1)
+label_2.grid(row=1, column=0)
+entry_2.grid(row=1, column=1)
+label_3.grid(row=2, column=0, columnspan=2)
+label_4.grid(row=3, column=0, columnspan=2)
+button_1.grid(row=4, column=0, columnspan=2)
+
+time = 0
+
+root.mainloop()
